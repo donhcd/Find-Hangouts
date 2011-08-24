@@ -34,6 +34,8 @@
                                  )
            [[[poi-1 poi-1 poi-1] 0]
             [[poi-1 poi-1 poi-2] 0]
+            [[poi-1 poi-2 poi-1] 1]
+            [[poi-1 poi-2 poi-2] 1]
             [[poi-1 poi-3 poi-3] 0]]))))
 
 (deftest get-poi-data-entries-helper-test

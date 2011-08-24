@@ -98,8 +98,7 @@
 (defn sort-hang-outs
   "sorts the hang-outs by total walking distance"
   [hang-outs]
-  (sort-by #(compare (second %2) (second %))
-           hang-outs))
+  (sort-by second hang-outs))
                            
 (defn find-hang-outs
   "Example input:
@@ -122,4 +121,4 @@
       (if poi-data
           (recur (add-pois-to-hang-outs max-total-dist hang-outs (first poi-data))
                  (next poi-data))
-          (add-walks-back hang-outs max-total-dist)))))
+          (sort-hang-outs (add-walks-back hang-outs max-total-dist))))))
