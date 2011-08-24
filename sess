@@ -1,0 +1,441 @@
+let SessionLoad = 1
+if &cp | set nocp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+inoremap <Plug>ClojureReplDownHistory :call b:vimclojure_repl.downHistory()
+inoremap <Plug>ClojureReplUpHistory :call b:vimclojure_repl.upHistory()
+inoremap <Plug>ClojureReplEnterHook :call b:vimclojure_repl.enterHook()
+map  h|
+vnoremap <silent> <NL> :call MoveVisualDown()
+nnoremap <silent> <NL> :call MoveLineDown()
+vnoremap <silent>  :call MoveVisualUp()
+nnoremap <silent>  :call MoveLineUp()
+map  l|
+map + +
+map - -
+nmap gx <Plug>NetrwBrowseX
+nnoremap g{ {dap}p{
+nnoremap <silent> gr "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1//\w\+\_W\+
+nnoremap <silent> gl "_yiw?\w\+\_W\+\%#:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/
+nnoremap <silent> gw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
+nnoremap <silent> gc xph
+nmap td :tabclose
+nmap t% :tabedit %
+nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
+nnoremap <Plug>ClojureCloseResultBuffer :call vimclojure#ResultBuffer.CloseBuffer()
+nnoremap <Plug>ClojureStartLocalRepl :call vimclojure#ProtectedPlug(function("vimclojure#StartRepl"), [ b:vimclojure_namespace ])
+nnoremap <Plug>ClojureStartRepl :call vimclojure#ProtectedPlug(function("vimclojure#StartRepl"), [  ])
+nnoremap <Plug>ClojureEvalParagraph :call vimclojure#ProtectedPlug(function("vimclojure#EvalParagraph"), [  ])
+nnoremap <Plug>ClojureEvalToplevel :call vimclojure#ProtectedPlug(function("vimclojure#EvalToplevel"), [  ])
+vnoremap <Plug>ClojureEvalBlock :call vimclojure#ProtectedPlug(function("vimclojure#EvalBlock"), [  ])
+nnoremap <Plug>ClojureEvalLine :call vimclojure#ProtectedPlug(function("vimclojure#EvalLine"), [  ])
+nnoremap <Plug>ClojureEvalFile :call vimclojure#ProtectedPlug(function("vimclojure#EvalFile"), [  ])
+nnoremap <Plug>ClojureMacroExpand1 :call vimclojure#ProtectedPlug(function("vimclojure#MacroExpand"), [ 1 ])
+nnoremap <Plug>ClojureMacroExpand :call vimclojure#ProtectedPlug(function("vimclojure#MacroExpand"), [ 0 ])
+nnoremap <Plug>ClojureRunTests :call vimclojure#ProtectedPlug(function("vimclojure#RunTests"), [ 0 ])
+nnoremap <Plug>ClojureRequireFileAll :call vimclojure#ProtectedPlug(function("vimclojure#RequireFile"), [ 1 ])
+nnoremap <Plug>ClojureRequireFile :call vimclojure#ProtectedPlug(function("vimclojure#RequireFile"), [ 0 ])
+nnoremap <Plug>ClojureGotoSourceInteractive :call vimclojure#ProtectedPlug(function("vimclojure#GotoSource"), [ input("Symbol to go to: ") ])
+nnoremap <Plug>ClojureGotoSourceWord :call vimclojure#ProtectedPlug(function("vimclojure#GotoSource"), [ expand("<cword>") ])
+nnoremap <Plug>ClojureSourceLookupInteractive :call vimclojure#ProtectedPlug(function("vimclojure#SourceLookup"), [ input("Symbol to look up: ") ])
+nnoremap <Plug>ClojureSourceLookupWord :call vimclojure#ProtectedPlug(function("vimclojure#SourceLookup"), [ expand("<cword>") ])
+nnoremap <Plug>ClojureMetaLookupInteractive :call vimclojure#ProtectedPlug(function("vimclojure#MetaLookup"), [ input("Symbol to look up: ") ])
+nnoremap <Plug>ClojureMetaLookupWord :call vimclojure#ProtectedPlug(function("vimclojure#MetaLookup"), [ expand("<cword>") ])
+nnoremap <Plug>ClojureFindDoc :call vimclojure#ProtectedPlug(function("vimclojure#FindDoc"), [  ])
+nnoremap <Plug>ClojureJavadocLookupInteractive :call vimclojure#ProtectedPlug(function("vimclojure#JavadocLookup"), [ input("Class to lookup: ") ])
+nnoremap <Plug>ClojureJavadocLookupWord :call vimclojure#ProtectedPlug(function("vimclojure#JavadocLookup"), [ expand("<cword>") ])
+nnoremap <Plug>ClojureDocLookupInteractive :call vimclojure#ProtectedPlug(function("vimclojure#DocLookup"), [ input("Symbol to look up: ") ])
+nnoremap <Plug>ClojureDocLookupWord :call vimclojure#ProtectedPlug(function("vimclojure#DocLookup"), [ expand("<cword>") ])
+nnoremap <Plug>ClojureAddToLispWords :call vimclojure#ProtectedPlug(function("vimclojure#AddToLispWords"), [ expand("<cword>") ])
+map <F12> _|
+inoremap <silent> <NL> :call MoveLineDown()
+inoremap <silent>  :call MoveLineUp()
+cabbr W write
+cabbr Q quit!
+let &cpo=s:cpo_save
+unlet s:cpo_save
+set autoindent
+set background=dark
+set backspace=indent,eol,start
+set expandtab
+set fileencodings=ucs-bom,utf-8,default,latin1
+set helplang=en
+set incsearch
+set omnifunc=syntaxcomplete#Complete
+set printoptions=paper:letter
+set ruler
+set runtimepath=~/.vim,/var/lib/vim/addons,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/var/lib/vim/addons/after,~/.vim/after
+set shiftwidth=2
+set smartindent
+set smarttab
+set softtabstop=2
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set tabstop=2
+set textwidth=80
+set virtualedit=all
+set visualbell
+set winminheight=0
+set winminwidth=0
+set wrapmargin=80
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+let v:this_session=expand("<sfile>:p")
+silent only
+cd ~/workspace/find_hang_outs
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+set shortmess=aoO
+badd +1 src/find_hang_outs/core.clj
+badd +1 test/find_hang_outs/test/core.clj
+badd +6 ~/.xmodmap
+args src/find_hang_outs/core.clj
+edit test/find_hang_outs/test/core.clj
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 238)
+exe 'vert 2resize ' . ((&columns * 118 + 119) / 238)
+argglobal
+let s:cpo_save=&cpo
+set cpo&vim
+nmap <buffer> <silent> \p <Plug>ClojureCloseResultBuffer
+nmap <buffer> <silent> \aw <Plug>ClojureAddToLispWords
+let &cpo=s:cpo_save
+unlet s:cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal nocindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:;\ -,mO:;\ \ ,n:;
+setlocal commentstring=;%s
+setlocal complete=.,w,b,u,t,i,k/home/don/.vim/ftplugin/clojure/completions-clojure.core.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.inspector.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.browse.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.io.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.javadoc.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.shell.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.main.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.pprint.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.repl.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.set.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.stacktrace.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.string.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.template.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.test.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.test.tap.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.test.junit.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.walk.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.xml.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.zip.txt
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=^\\s*(def\\(-|n|n-|macro|struct|multi\\)?
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'clojure'
+setlocal filetype=clojure
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=0
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255,?,-,*,!,+,/,=,<,>,.,:
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=syntaxcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=2
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=2
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'clojure'
+setlocal syntax=clojure
+endif
+setlocal tabstop=2
+setlocal tags=
+setlocal textwidth=80
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=80
+silent! normal! zE
+let s:l = 6 - ((5 * winheight(0) + 31) / 62)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+6
+normal! 097l
+wincmd w
+argglobal
+edit src/find_hang_outs/core.clj
+let s:cpo_save=&cpo
+set cpo&vim
+nmap <buffer> <silent> \p <Plug>ClojureCloseResultBuffer
+nmap <buffer> <silent> \aw <Plug>ClojureAddToLispWords
+let &cpo=s:cpo_save
+unlet s:cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal nocindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:;\ -,mO:;\ \ ,n:;
+setlocal commentstring=;%s
+setlocal complete=.,w,b,u,t,i,k/home/don/.vim/ftplugin/clojure/completions-clojure.core.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.inspector.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.browse.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.io.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.javadoc.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.java.shell.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.main.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.pprint.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.repl.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.set.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.stacktrace.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.string.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.template.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.test.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.test.tap.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.test.junit.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.walk.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.xml.txt,k/home/don/.vim/ftplugin/clojure/completions-clojure.zip.txt
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=^\\s*(def\\(-|n|n-|macro|struct|multi\\)?
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'clojure'
+setlocal filetype=clojure
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=0
+setlocal imsearch=0
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255,?,-,*,!,+,/,=,<,>,.,:
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=syntaxcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=2
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=2
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'clojure'
+setlocal syntax=clojure
+endif
+setlocal tabstop=2
+setlocal tags=
+setlocal textwidth=80
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=80
+silent! normal! zE
+1,4fold
+1,6fold
+7,17fold
+24,26fold
+32,35fold
+45,50fold
+63,66fold
+63,66fold
+72,77fold
+89,92fold
+89,92fold
+105,111fold
+105,111fold
+105,111fold
+105,111fold
+105,111fold
+7,111fold
+113,114fold
+113,116fold
+113,118fold
+113,118fold
+113,118fold
+1
+normal zo
+1
+normal zo
+1
+normal zc
+7
+normal zo
+7
+normal zo
+24
+normal zc
+32
+normal zc
+45
+normal zc
+63
+normal zo
+63
+normal zc
+63
+normal zc
+72
+normal zc
+89
+normal zo
+89
+normal zc
+89
+normal zc
+105
+normal zo
+105
+normal zo
+105
+normal zo
+105
+normal zo
+105
+normal zc
+105
+normal zo
+105
+normal zo
+105
+normal zo
+105
+normal zo
+7
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+113
+normal zo
+let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
+wincmd w
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 238)
+exe 'vert 2resize ' . ((&columns * 118 + 119) / 238)
+tabnext 1
+if exists('s:wipebuf')
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20 shortmess=filnxtToO
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if file_readable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :

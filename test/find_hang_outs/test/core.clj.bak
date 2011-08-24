@@ -1,0 +1,59 @@
+(ns find-clusters.test.core.bak
+  (:use [find-clusters.core.bak] :reload)
+  (:import [com.javadocmd.simplelatlng LatLng])
+  (:use [clojure.test]))
+
+;(deftest distance-lt-test
+;  (let [lat-lng-1 (LatLng. 10 10)
+;        lat-lng-2 (LatLng. 100 100)
+;        poi-1 {:LatLng lat-lng-1}
+;        poi-2 {:LatLng lat-lng-2}]
+;    (is (distance-lt 1 poi-1 poi-1))
+;    (is (thrown? java.lang.AssertionError (distance-lt 1 [1 2] [3 4])))
+;    (is (not (distance-lt 1 poi-1 poi-2)))))
+
+(deftest add-pois-test
+  (let [lat-lng-1 (LatLng. 10 10.00)
+        lat-lng-2 (LatLng. 10 10)
+        lat-lng-3 (LatLng. 100 100)
+        poi-1     {:LatLng lat-lng-1}
+        poi-2     {:LatLng lat-lng-2}
+        poi-3     {:LatLng lat-lng-3}]
+    (is (= (add-pois 1
+                     [[poi-3 poi-1] 0] ;; a cluster
+                     [poi-3 poi-2 poi-2] ;; next pois
+                     )
+           [[[{:LatLng lat-lng-3} {:LatLng lat-lng-1} {:LatLng lat-lng-2}] 0]
+            [[{:LatLng lat-lng-3} {:LatLng lat-lng-1} {:LatLng lat-lng-2}] 0]]))
+    (is (= (add-pois 1 [[poi-3] 0] [poi-1])
+           ()))))
+
+(deftest add-pois-to-clusters-test
+  (let [lat-lng-1 (LatLng. 10 10.00)
+        lat-lng-2 (LatLng. 10 10)
+        lat-lng-3 (LatLng. 100 100)
+        poi-1 {:LatLng lat-lng-1}
+        poi-2 {:LatLng lat-lng-2}
+        poi-3 {:LatLng lat-lng-3}]
+    (is (= (add-pois-to-clusters 1                 ; max dist
+                                 [[[poi-1 poi-1] 0] [[poi-1 poi-2] 1] [[poi-1 poi-3] 0]] ; clusters
+                                 [poi-1 poi-2 poi-3] ; next pois
+                                 )
+           [[[poi-1 poi-1 poi-1] 0]
+            [[poi-1 poi-1 poi-2] 0]
+            [[poi-1 poi-3 poi-3] 0]]))))
+
+(deftest get-poi-data-entries-helper-test
+  (is (get-poi-data-entries-helper {:country "US" :region "CA" :locality "Los Angeles"}
+                                   :pizza)))
+
+(deftest get-poi-data-entries-test
+  (is (get-poi-data-entries {:country "US" :region "CA" :locality "Los Angeles"}
+                            [:pizza :karaoke :park])))
+
+(deftest find-cluster-test
+  (doseq [poi (map :name
+                   (ffirst (find-cluster [:pizza :karaoke :park]
+                                        6
+                                        :country "US" :region "CA" :locality "Los Angeles")))]
+    (println poi)))
