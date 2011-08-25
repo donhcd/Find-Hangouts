@@ -1,8 +1,15 @@
 (ns find-hang-outs.core
+  ;(:use clojure.contrib.pprint)
   (:use funnyplaces.api)               
   (:import [com.javadocmd.simplelatlng LatLng LatLngTool util.LengthUnit]))
 
-(factual! "ylIucvB3r2oIQ3iBjOES4h1mZcNCZyBmQFcYREdj" "5VTCQYxgp5lwj9r1FEHfSg0rUCnTU1nZLDpwMrJX")
+(def FACTUAL-KEY "qwsBU2rRRrcSjv4kgqbAHjbAWP2OvY7BMbmisXoi")
+(def FACTUAL-SECRET "fVFiie2DTlu2LyWRIseZcjlSiuGN06xD6h80DVjp")
+(factual! FACTUAL-KEY FACTUAL-SECRET)
+; this key/secret allows offset as deep as 5000, taking 1000 at a time
+
+(def page-size 50)
+(def offset-limit 500)
 
 (defn hang-out? [hang-out]
   (when *assert*
@@ -17,8 +24,8 @@
 
 (defn map-to-vec [m] (apply concat (seq m)))
 
-(defn nm-merge "nested map merge" [& mms]
-  (apply (partial merge-with nm-merge) mms))
+(defn nm-merge "nested map merge" [& nms]
+  (apply (partial merge-with nm-merge) nms))
 
 (defn get-distance [p1 p2]
   {:pre  [(map? p1)
@@ -48,9 +55,9 @@
           (coll? next-pois)
           (every? map? next-pois)]
    :post [(every? hang-out-dist-tuple? hang-outs)]}
-  (apply concat
+  (apply concat 
          (map #(add-pois max-dist % next-pois)
-              hang-outs)))
+         hang-outs)))
 
 (defn add-LatLngs
   "Adds LatLng objects to each poi-data-entry for comparing distances"
@@ -59,14 +66,52 @@
                                   (% :longitude)))
        poi-data-entries))
 
-(defn get-poi-data-entries-helper [main-filter poi-filter]
-  {:pre  [(map? main-filter)
-          (map? poi-filter)]
-   :post [(coll? %)
-          (every? map? %)]}
-  (->> (nm-merge main-filter poi-filter)
+(defn fetch-using-maps
+  [& ms]
+  {:pre  [(every? map? ms)]
+   :post [(every? map? %)]}
+  (->> (apply nm-merge ms)
        map-to-vec
        (apply (partial fetch :places))))
+
+(defn get-count
+  [main-filter poi-filter]
+  {:pre  [(map? main-filter)
+          (map? poi-filter)]
+   :post [integer?]}
+  ((meta (fetch-using-maps main-filter
+                           poi-filter
+                           {:include_count true :limit 1}))
+   :total_row_count))
+
+(defn get-poi-data-entries-helper
+  ([main-filter poi-filter]
+    {:pre  [(map? main-filter)
+            (map? poi-filter)]
+     :post [(coll? %)
+            (every? map? %)]}
+    (get-poi-data-entries-helper (assoc main-filter :limit page-size)
+                                 poi-filter
+                                 0
+                                 (get-count main-filter poi-filter)))
+  ([main-filter poi-filter offset row-count]
+    {:pre  [(map? main-filter)
+            (map? poi-filter)
+            (integer? offset)
+            (or (integer? row-count)
+                (nil? row-count))]
+     :post [(coll? %)
+            (every? map? %)]}
+    (->> (nm-merge main-filter poi-filter {:offset offset})
+         map-to-vec
+         (apply (partial fetch :places))
+         (concat (let [num-entries-taken (+ offset page-size)]
+                   (when (and (< num-entries-taken row-count)
+                              (< num-entries-taken offset-limit))
+                     (get-poi-data-entries-helper main-filter
+                                                  poi-filter
+                                                  num-entries-taken
+                                                  row-count)))))))
 
 (defn get-poi-data-entries [main-filter poi-filters]
   {:pre  [(map? main-filter)
@@ -115,10 +160,15 @@
           (every? map? poi-filters)]
    :post [(coll? %)
           (every? hang-out-dist-tuple? %)]}
-  (let [poi-data (get-poi-data-entries main-filter poi-filters)]
-    (loop [hang-outs   (get-init-hang-outs poi-data)
+  (let [default-filter  {:filters {:latitude  {:$blank false}
+                                   :longitude {:$blank false}}}
+        main-filter           (nm-merge main-filter default-filter)
+        poi-data              (get-poi-data-entries main-filter poi-filters)]
+    (loop [hang-outs  (get-init-hang-outs poi-data)
            poi-data   (next poi-data)]
       (if poi-data
-          (recur (add-pois-to-hang-outs max-total-dist hang-outs (first poi-data))
+          (recur (add-pois-to-hang-outs max-total-dist 
+                                        hang-outs
+                                        (first poi-data))
                  (next poi-data))
           (sort-hang-outs (add-walks-back hang-outs max-total-dist))))))

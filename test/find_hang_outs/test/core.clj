@@ -1,6 +1,7 @@
 (ns find-hang-outs.test.core
   (:use [find-hang-outs.core] :reload)
   (:use [clojure.test])
+  (:use [clojure.contrib.pprint])
   (:import [com.javadocmd.simplelatlng LatLng]))
 
 ;trial code: (map (fn [[c d]] (println d "\n" (map :name c))) (find-hang-outs.core/find-hang-out 6 {:filters {:country "US" :region "CA" :locality "Los Angeles"}} [{:filters {:name {:$bw "pizza"}}} {:filters {:name {:$bw "karaoke"}}} {:q "park"}]))
@@ -28,15 +29,15 @@
         poi-1 {:LatLng lat-lng-1}
         poi-2 {:LatLng lat-lng-2}
         poi-3 {:LatLng lat-lng-3}]
-    (is (= (add-pois-to-hang-outs 1                 ; max dist
-                                 [[[poi-1 poi-1] 0] [[poi-1 poi-2] 1] [[poi-1 poi-3] 0]] ; hang-outs
+    (is (=  (add-pois-to-hang-outs 1.0                 ; max dist
+                                 [[[poi-1 poi-1] 0.0] [[poi-1 poi-2] 1.0] [[poi-1 poi-3] 0.0]] ; hang-outs
                                  [poi-1 poi-2 poi-3] ; next pois
                                  )
-           [[[poi-1 poi-1 poi-1] 0]
-            [[poi-1 poi-1 poi-2] 0]
-            [[poi-1 poi-2 poi-1] 1]
-            [[poi-1 poi-2 poi-2] 1]
-            [[poi-1 poi-3 poi-3] 0]]))))
+           [[[poi-1 poi-1 poi-1] 0.0]
+            [[poi-1 poi-1 poi-2] 0.0]
+            [[poi-1 poi-2 poi-1] 1.0]
+            [[poi-1 poi-2 poi-2] 1.0]
+            [[poi-1 poi-3 poi-3] 0.0]]))))
 
 (deftest get-poi-data-entries-helper-test
   (is (get-poi-data-entries-helper {:filters {:country "US" :region "CA" :locality "Los Angeles"}}
