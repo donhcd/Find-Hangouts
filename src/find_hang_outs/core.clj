@@ -160,8 +160,10 @@
           (every? map? poi-filters)]
    :post [(coll? %)
           (every? hang-out-dist-tuple? %)]}
-  (let [default-filter  {:filters {:latitude  {:$blank false}
-                                   :longitude {:$blank false}}}
+  (let [default-filter        {:filters {:$and [{:latitude  {:$blank false}}
+                                                {:longitude {:$blank false}}]
+                                         :$or  [{:latitude  {:$neq 0}}
+                                                {:longitude {:$neq 0}}]}}
         main-filter           (nm-merge main-filter default-filter)
         poi-data              (get-poi-data-entries main-filter poi-filters)]
     (loop [hang-outs  (get-init-hang-outs poi-data)
